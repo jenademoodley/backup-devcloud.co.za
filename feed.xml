@@ -10,6 +10,29 @@
     <id>https://devcloud.co.za</id>
 
     <entry>
+        <title>About this Website</title>
+        <author>
+            <name>Jenade Moodley</name>
+        </author>
+        <link href="https://devcloud.co.za/about-this-website.html"/>
+        <id>https://devcloud.co.za/about-this-website.html</id>
+
+        <updated>2020-07-20T20:18:24+02:00</updated>
+            <summary>
+                <![CDATA[
+                     To do 
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                
+  <p>
+    To do
+  </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>Improving EFS Performance (Part 2)</title>
         <author>
             <name>Jenade Moodley</name>
@@ -17,7 +40,7 @@
         <link href="https://devcloud.co.za/improving-efs-performance-part-2.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-2.html</id>
 
-        <updated>2020-07-20T19:50:09+02:00</updated>
+        <updated>2020-07-20T20:18:24+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -346,7 +369,7 @@ sys     0m45.163s
         <link href="https://devcloud.co.za/improving-efs-performance-part-1.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-1.html</id>
 
-        <updated>2020-07-20T19:50:09+02:00</updated>
+        <updated>2020-07-20T20:18:24+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
