@@ -14,15 +14,15 @@
             "url": "https://devcloud.co.za/about-this-website.html",
             "title": "About this Website",
             "summary": " This website is a personal project which I have built as a way of sharing my experiences with various technologies, and also allows me to document said experiences for self-reference. It is also a way for me to experiment with serverless architecture; the website&hellip;",
-            "content_html": "\n  <p>\n    This website is a personal project which I have built as a way of sharing my experiences with various technologies, and also allows me to document said experiences for self-reference. It is also a way for me to experiment with serverless architecture; the website is a static website built using Publii CMS (Content Management System), and is hosted on GitHub pages. DNS and SSL is managed by CloudFlare, and the site makes use of CloudFlare CDN as well to boost performance.\n  </p>\n\n    <h2 id=\"so-you-noticed-there-were-no-ads\">\n      So you noticed there were no ads\n    </h2>\n\n  <p>\n    All of the above components (Publii, GitHub pages, CloudFlare) all have an impressive free tier offering, essentially allowing you to run and manage your own website at virtually no cost. As there are no costs involved with this website, there are no ads included. This allows for a clean and fast user experience.\n  </p>\n\n    <h2 id=\"looking-to-the-future\">\n      Looking to the Future\n    </h2>\n\n  <p>\n    At present, this website is basically a platform for me to share my knowledge and experiences, as well as a playground for testing serverless architecture. Any future plans for this website for this website would depend on the reception and feedback received on the posted content. As the website is still new, no such plans have been made.\n  </p>\n\n  <p>\n    Looking at short-term goals, I will be adding more content in various categories including Linux and containers, and possibly even a coding section. I will also be adding additional AWS based content based on my experiences with certain services (such as EC2, ECS, and EFS).\n  </p>\n\n  <p>\n    And finally, feel free to share these posts if they were a worthwhile read, or if they have helped you with any issues you may have faced.&nbsp;I hope you have fun reading these posts as I have had writing them.&nbsp;\n  </p>",
+            "content_html": "\n  <p>\n    This website is a personal project which I have built as a way of sharing my experiences with various technologies, and also allows me to document said experiences for self-reference. It is also a way for me to experiment with <a href=\"https://www.cloudflare.com/learning/serverless/what-is-serverless/\" target=\"_blank\">serverless</a> architecture; the website is a static website built using <a href=\"https://getpublii.com/\" target=\"_blank\">Publii CMS</a> (Content Management System), and is hosted on <a href=\"https://pages.github.com/\" target=\"_blank\">GitHub Pages</a>. As inquisitive users may have already gathered, DNS and SSL is managed by <a href=\"https://www.cloudflare.com/\" target=\"_blank\">CloudFlare</a>, and the site makes use of CloudFlare's CDN (Content Distribution Network) as well to boost performance.\n  </p>\n\n    <h2 id=\"so-you-noticed-there-were-no-ads\">\n      So you noticed there were no ads\n    </h2>\n\n  <p>\n    All of the above components (Publii, GitHub Pages, CloudFlare) all have an impressive free tier offering, essentially allowing you to run and manage your own website at virtually no cost. As there are no costs involved with this website, there are no ads included. This allows for a clean and fast user experience.\n  </p>\n\n    <h2 id=\"looking-to-the-future\">\n      Looking to the Future\n    </h2>\n\n  <p>\n    At present, this website is basically a platform for me to share my knowledge and experiences, as well as a playground for testing serverless architecture. Any future plans for this website would depend on the reception and feedback received on the posted content. As the website is still new, no such plans have been made.\n  </p>\n\n  <p>\n    Looking at short-term goals, I will be adding more content in various categories including Linux and containers, and possibly even a coding section. I will also be adding additional AWS based content based on my experiences with certain services (such as EC2, ECS, and EFS).\n  </p>\n\n  <p>\n    And finally, feel free to share these posts if they were a worthwhile read, or if they have helped you with any issues you may have faced.&nbsp;I hope you have fun reading these posts as I have had writing them.&nbsp;\n  </p>",
             "image": "https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg",
             "author": {
                 "name": "Jenade Moodley"
             },
             "tags": [
             ],
-            "date_published": "2020-07-20T21:01:20+02:00",
-            "date_modified": "2020-07-20T21:01:20+02:00"
+            "date_published": "2020-07-20T21:12:55+02:00",
+            "date_modified": "2020-07-20T21:12:55+02:00"
         },
         {
             "id": "https://devcloud.co.za/improving-efs-performance-part-2.html",
@@ -36,8 +36,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-07-20T21:01:20+02:00",
-            "date_modified": "2020-07-20T21:01:20+02:00"
+            "date_published": "2020-07-20T21:12:55+02:00",
+            "date_modified": "2020-07-20T21:12:55+02:00"
         },
         {
             "id": "https://devcloud.co.za/improving-efs-performance-part-1.html",
@@ -51,8 +51,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-07-20T21:01:20+02:00",
-            "date_modified": "2020-07-20T21:01:20+02:00"
+            "date_published": "2020-07-20T21:12:55+02:00",
+            "date_modified": "2020-07-20T21:12:55+02:00"
         }
     ]
 }
