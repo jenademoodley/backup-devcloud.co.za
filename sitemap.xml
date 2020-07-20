@@ -6,7 +6,11 @@
 </url>
 <url>
 <loc>https://devcloud.co.za/about-this-website.html</loc>
-<lastmod>2020-07-20T20:17:47+02:00</lastmod>
+<lastmod>2020-07-20T21:01:11+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\8/Optimizing-Images-for-The-Web.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
 </url>
 <url>
 <loc>https://devcloud.co.za/improving-efs-performance-part-1.html</loc>

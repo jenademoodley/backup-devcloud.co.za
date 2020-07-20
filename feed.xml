@@ -17,17 +17,43 @@
         <link href="https://devcloud.co.za/about-this-website.html"/>
         <id>https://devcloud.co.za/about-this-website.html</id>
 
-        <updated>2020-07-20T20:18:24+02:00</updated>
+        <updated>2020-07-20T21:01:20+02:00</updated>
             <summary>
                 <![CDATA[
-                     To do 
+                        <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
+                     This website is a personal project which I have built as a way of sharing my experiences with various technologies, and also allows me to document said experiences for self-reference. It is also a way for me to experiment with serverless architecture; the website&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
+                    <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
                 
   <p>
-    To do
+    This website is a personal project which I have built as a way of sharing my experiences with various technologies, and also allows me to document said experiences for self-reference. It is also a way for me to experiment with serverless architecture; the website is a static website built using Publii CMS (Content Management System), and is hosted on GitHub pages. DNS and SSL is managed by CloudFlare, and the site makes use of CloudFlare CDN as well to boost performance.
+  </p>
+
+    <h2 id="so-you-noticed-there-were-no-ads">
+      So you noticed there were no ads
+    </h2>
+
+  <p>
+    All of the above components (Publii, GitHub pages, CloudFlare) all have an impressive free tier offering, essentially allowing you to run and manage your own website at virtually no cost. As there are no costs involved with this website, there are no ads included. This allows for a clean and fast user experience.
+  </p>
+
+    <h2 id="looking-to-the-future">
+      Looking to the Future
+    </h2>
+
+  <p>
+    At present, this website is basically a platform for me to share my knowledge and experiences, as well as a playground for testing serverless architecture. Any future plans for this website for this website would depend on the reception and feedback received on the posted content. As the website is still new, no such plans have been made.
+  </p>
+
+  <p>
+    Looking at short-term goals, I will be adding more content in various categories including Linux and containers, and possibly even a coding section. I will also be adding additional AWS based content based on my experiences with certain services (such as EC2, ECS, and EFS).
+  </p>
+
+  <p>
+    And finally, feel free to share these posts if they were a worthwhile read, or if they have helped you with any issues you may have faced.&nbsp;I hope you have fun reading these posts as I have had writing them.&nbsp;
   </p>
             ]]>
         </content>
@@ -40,7 +66,7 @@
         <link href="https://devcloud.co.za/improving-efs-performance-part-2.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-2.html</id>
 
-        <updated>2020-07-20T20:18:24+02:00</updated>
+        <updated>2020-07-20T21:01:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -369,7 +395,7 @@ sys     0m45.163s
         <link href="https://devcloud.co.za/improving-efs-performance-part-1.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-1.html</id>
 
-        <updated>2020-07-20T20:18:24+02:00</updated>
+        <updated>2020-07-20T21:01:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
