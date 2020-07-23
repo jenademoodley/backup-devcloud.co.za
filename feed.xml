@@ -10,6 +10,86 @@
     <id>https://devcloud.co.za</id>
 
     <entry>
+        <title>ECS - Dynamic Port Mapping</title>
+        <author>
+            <name>Jenade Moodley</name>
+        </author>
+        <link href="https://devcloud.co.za/ecs-dynamic-port-mapping.html"/>
+        <id>https://devcloud.co.za/ecs-dynamic-port-mapping.html</id>
+
+        <updated>2020-07-24T00:21:39+02:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
+                     The Port Mapping Problem A popular function of containers is to run a service such as a web or application server to which clients connect to using HTTP, TCP or socket connections. By default, Docker will allocate a port from the host to the&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
+                
+    <h2 id="the-port-mapping-problem">
+      The Port Mapping Problem
+    </h2>
+
+  <p>
+    A popular function of containers is to run a service such as a web or application server to which clients connect to using HTTP, TCP or socket connections. By default, Docker will allocate a port from the host to the container from the ephemeral port range, but you can manually map or expose a specific host port, such as mapping port 80 on the host to port 8080 on the container. This works fine for individual containers and tasks, but if you need to run another container of the same type, you would then need another host as you cannot bind more than one container to a specific host port (i.e. if there is a container or service listening on a specific port such as port 80, no other service or container can use or bind that specific port.
+  </p>
+
+  <p>
+    Additionally, if your container is lightweight and uses minimal CPU and memory resources, this results in resource wastage as you would need to launch an entirely new instance simply to cater for this port conflict. If you wish to configure reactive scaling (i.e. scale the number of containers due to demand), this is also a blocking factor as this means that you either need additional EC2 instances on standby (increased cost), or spin up a new instance in accordance to demand (slower scale time). You would have to accurately map and plan your port usage on your EC2 hosts such that you can launch your containers without port conflicts, which increases management overhead.
+  </p>
+
+    <h2 id="enter-dynamic-port-mapping">
+      Enter Dynamic Port Mapping
+    </h2>
+
+  <p>
+    If you are going to be using multiple containers to host a service, you would also need to configure a suitable and robust solution in order to access each of these containers. When considering HTTP requests, a popular choice in AWS is to use the Application Load Balancer (ALB), often called a Layer 7 load balancer (referring to layer 7 Application layer in the <a href="https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/" target="_blank">OSI model</a>, hence the name). An ALB will allow you to effectively distribute (or balance) requests to multiple targets to which it is connected to. While the port on the ALB to which you will issue requests to will always remain the same (port 80 for HTTP requests, and port 443 for HTTPS requests), the back end targets can each be listening on a different port, for example one target can be listening on port 8080, another can be listening on port 8000, etc. Multiple targets can even belong on the same EC2 instance, provided that the ports are different.
+  </p>
+
+  <p>
+    Using this functionality, we can apply this behaviour to containers. We can run the containers without specifying the port mapping (i.e. allow Docker to map the container port to an ephemeral port on the host), and then configure these containers to be targets for the ALB. This would allow you to run multiple containers of the same type, on the same EC2 instance, effectively reducing cost and management overhead. The ECS service is also capable of determining which host port your container has been bound to, and can configure the target registration for that specific port and container on the ALB, which allows for a seamless configuration.
+  </p>
+
+    <h2 id="setting-up-dynamic-port-mapping">
+      Setting up Dynamic Port Mapping
+    </h2>
+
+  <p>
+    Dynamic Port Mapping is relatively easy to configure. From the ECS service side, all you need to do is set the "Host" port in the container mapping to "0". A JSON snippet of the task definition would therefore look like this:
+  </p>
+<pre class="line-numbers  language-json"><code>"portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ]</code></pre>
+
+  <p>
+    However, additional configurations may need to be done on your VPC and container instances in order to allow the connections to successfully reach the container. As the containers will be mapped to the ephemeral ports of the host, you would need to ensure the following criteria is met:
+  </p>
+
+  <ol>
+    <li>The security groups attached to your container instances or tasks allow for incoming connections on the ephemeral port range from the ALB nodes.</li><li>The NACLs used by the subnet in which your tasks or container instances are located must allow inbound and outbound connections on the ephemeral port range.</li>
+  </ol>
+
+  <p>
+    The ephemeral port range used by Docker versions 1.6.0 and later will refer to the&nbsp;<code>/proc/sys/net/ipv4/ip_local_port_range</code> kernel parameter on the host. If this kernel parameter is not available, or if you are using an earlier version of Docker, the default ephemeral port range is used, which ranges from ports&nbsp;49153 through 65535. In general,&nbsp;ports below 32768 fall outside of the ephemeral port range. As a general rule of thumb, you can allow incoming connections from ports 32768 through 65535 in order to account for both scenarios and avoid any issues.
+  </p>
+
+    <h2 id="considerations">
+      Considerations
+    </h2>
+
+  <p>
+    As you can now have multiple containers running on a single host to which you can connect to using your ALB, a logical consideration is having too many containers on the same host. This can cause resource contention, and can cause containers to be stopped if the configurations are too restrictive. You should actively configure task and container memory and CPU limits so that each container will be given ample resources on the host in order to function effectively.
+  </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>About this Website</title>
         <author>
             <name>Jenade Moodley</name>
@@ -17,7 +97,7 @@
         <link href="https://devcloud.co.za/about-this-website.html"/>
         <id>https://devcloud.co.za/about-this-website.html</id>
 
-        <updated>2020-07-20T21:12:55+02:00</updated>
+        <updated>2020-07-24T00:21:39+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
@@ -66,7 +146,7 @@
         <link href="https://devcloud.co.za/improving-efs-performance-part-2.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-2.html</id>
 
-        <updated>2020-07-20T21:12:55+02:00</updated>
+        <updated>2020-07-24T00:21:39+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -80,7 +160,7 @@
   <p>
     As discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-1.html">part 1</a> of this blog post, the latency which occurs with EFS is per-file operation latency due to the nature of the NFS protocol, specifically with handling metadata. In order to improve performance of your application, you need to understand the nature of your application, i.e. is your application performing mainly read or write operations. There are a few ways to determine this, which is discussed in the NFS troubleshooting blog post, however an easy way to determine the activity of your EFS on your EC2 instance is to use the <code>mountstats</code> command.
   </p>
-<pre class="line-numbers  language-bash"><code>mountstats /mnt/efs
+<pre class="line-numbers  language-bash"><code>$ mountstats /mnt/efs
 Stats for 127.0.0.1:/ mounted on /mnt/efs:
 ...
 
@@ -189,13 +269,13 @@ SECINFO_NO_NAME:
     <h6 id="amazon-linux-centos-rhel">
       Amazon Linux, CentOS, RHEL
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo yum install cachefilesd -y</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo yum install cachefilesd -y</code></pre>
 
     <h6 id="ubuntu">
       Ubuntu
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo apt-get update
-sudo apt-get install cachefilesd</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo apt-get update
+$ sudo apt-get install cachefilesd</code></pre>
 
   <p>
     After installing the package, we need to start the <code>cachefilesd</code> daemon.
@@ -204,12 +284,12 @@ sudo apt-get install cachefilesd</code></pre>
     <h6 id="systemd">
       Systemd
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo systemctl start cachefilesd</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo systemctl start cachefilesd</code></pre>
 
     <h6 id="upstart">
       Upstart
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo service cachefilesd start</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo service cachefilesd start</code></pre>
 
   <p>
     We then need to instruct the NFS client to use the cache when accessing the EFS by specifying the <code>fsc</code> mount option when mounting the EFS.
@@ -218,12 +298,12 @@ sudo apt-get install cachefilesd</code></pre>
     <h6 id="using-the-efs-mount-helper">
       Using the EFS Mount Helper
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo mount -t efs -o fsc &lt;EFS_ID&gt; &lt;MOUNT_POINT&gt;</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo mount -t efs -o fsc &lt;EFS_ID&gt; &lt;MOUNT_POINT&gt;</code></pre>
 
     <h6 id="using-the-nfs-client">
       Using the NFS client
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo mount -t nfs4 -o fsc,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport &lt;EFS_DNS&gt;:/ &lt;MOUNT_POINT&gt;</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo mount -t nfs4 -o fsc,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport &lt;EFS_DNS&gt;:/ &lt;MOUNT_POINT&gt;</code></pre>
 
     <h4 id="testing-the-cache">
       Testing the cache
@@ -232,17 +312,17 @@ sudo apt-get install cachefilesd</code></pre>
   <p>
     To test the cache, we first need to create a small file on the EFS which we will be accessing.
   </p>
-<pre class="line-numbers  language-bash"><code>dd if=/dev/urandom of=/mnt/efs/cache_file bs=4k count=128</code></pre>
+<pre class="line-numbers  language-bash"><code>$ dd if=/dev/urandom of=/mnt/efs/cache_file bs=4k count=128</code></pre>
 
   <p>
     To ensure that the cache is not in effect, we can first clear the pagecache, dentries and inodes using&nbsp;<code>/proc/sys/vm/drop_caches</code>
   </p>
-<pre class="line-numbers  language-bash"><code>sudo echo 3 | sudo tee /proc/sys/vm/drop_caches && sudo sync</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo echo 3 | sudo tee /proc/sys/vm/drop_caches && sudo sync</code></pre>
 
   <p>
     We can then test an uncached access to the file we initially created.
   </p>
-<pre class="line-numbers  language-bash"><code>time dd if=/mnt/efs/cache_file of=$HOME/local_file bs=4k count=128
+<pre class="line-numbers  language-bash"><code>$ time dd if=/mnt/efs/cache_file of=$HOME/local_file bs=4k count=128
 128+0 records in
 128+0 records out
 524288 bytes (524 kB) copied, 0.0176215 s, 29.8 MB/s
@@ -254,7 +334,7 @@ sys     0m0.000s</code></pre>
   <p>
     First time accessing the file from the EFS took 0.027 seconds, at a speed of 29.8 MB/s. If we access this file again, this file will be served from the cache.
   </p>
-<pre class="line-numbers  language-bash"><code>time dd if=/mnt/efs/cache_file of=$HOME/local_file bs=4k count=128
+<pre class="line-numbers  language-bash"><code>$ time dd if=/mnt/efs/cache_file of=$HOME/local_file bs=4k count=128
 128+0 records in
 128+0 records out
 524288 bytes (524 kB) copied, 0.00155109 s, 338 MB/s
@@ -306,34 +386,34 @@ sys     0m0.000s</code></pre>
     <h6 id="rhel-7">
       RHEL 7
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum install parallel -y</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ sudo yum install parallel -y</code></pre>
 
     <h6 id="amazon-linux-rhel-6">
       Amazon Linux, RHEL 6
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-sudo yum install parallel -y</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+$ sudo yum install parallel -y</code></pre>
 
     <h6 id="amazon-linux-2">
       Amazon Linux 2
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo amazon-linux-extras install epel
-sudo yum install parallel -y
+<pre class="line-numbers  language-bash"><code>$ sudo amazon-linux-extras install epel
+$ sudo yum install parallel -y
 </code></pre>
 
     <h6 id="centos-6-centos-7">
       CentOS 6, CentOS 7
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo yum install epel-release
-sudo yum install parallel -y
+<pre class="line-numbers  language-bash"><code>$ sudo yum install epel-release
+$ sudo yum install parallel -y
 </code></pre>
 
     <h6 id="ubuntu">
       Ubuntu
     </h6>
-<pre class="line-numbers  language-bash"><code>sudo apt-get update
-sudo apt-get install parallel</code></pre>
+<pre class="line-numbers  language-bash"><code>$ sudo apt-get update
+$ sudo apt-get install parallel</code></pre>
 
     <h4 id="running-commands-in-parallel">
       Running commands in parallel
@@ -342,12 +422,12 @@ sudo apt-get install parallel</code></pre>
   <p>
     We first need to create a large number of small files on our local disk. In my test, I have created 10000 files. For reference, I am using a standard <code>t2.large</code>&nbsp;EC2 instance running Amazon Linux 2, with a general purpose (gp2) volume of 8 GB in size.
   </p>
-<pre class="line-numbers  language-bash"><code>mkdir /tmp/efs; for each in $(seq 1 10000); do SUFFIX=$(mktemp -u _XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX); sudo dd if=/dev/zero of=/tmp/efs/${SUFFIX} bs=64k count=1; done</code></pre>
+<pre class="line-numbers  language-bash"><code>$ mkdir /tmp/efs; for each in $(seq 1 10000); do SUFFIX=$(mktemp -u _XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX); sudo dd if=/dev/zero of=/tmp/efs/${SUFFIX} bs=64k count=1; done</code></pre>
 
   <p>
     We can then copy these files to the EFS with <code>rsync</code> using the standard serial method, and measure the time it takes to copy the files.
   </p>
-<pre class="line-numbers  language-bash"><code>cd /tmp/efs; time sudo find -L . -maxdepth 1 -type f -exec rsync -avR '{}' /mnt/efs/ \;
+<pre class="line-numbers  language-bash"><code>$ cd /tmp/efs; time sudo find -L . -maxdepth 1 -type f -exec rsync -avR '{}' /mnt/efs/ \;
 ...
 real    9m11.494s
 user    0m34.186s
@@ -356,7 +436,7 @@ sys     0m10.303s</code></pre>
   <p>
     The results show that it took longer than 9 minutes to copy 10000 files to the EFS using <code>rsync</code>. If we purge the directory, and use <code>rsync</code> in parallel:
   </p>
-<pre class="line-numbers  language-bash"><code>cd /tmp/efs; time find -L . -maxdepth 1 -type f | sudo parallel rsync -avR {} /mnt/efs/
+<pre class="line-numbers  language-bash"><code>$ cd /tmp/efs; time find -L . -maxdepth 1 -type f | sudo parallel rsync -avR {} /mnt/efs/
 ...
 real    5m41.274s
 user    1m1.279s
@@ -366,7 +446,7 @@ sys     0m37.556s
   <p>
     The files took longer than 5 minutes, effectively reducing the copy time by almost half. Furthermore, GNU parallel runs as many parallel jobs as there are CPU cores. As the <code>t2.large</code> instance contains 2 cores, this explains why the time was almost halved. However, GNU parallel allows you to specify the number of jobs by using the<code> --jobs</code> flag. If we set the <code>--jobs</code> flag to 0, it would try to run as many jobs as possible with the amount of CPU available.
   </p>
-<pre class="line-numbers  language-bash"><code>cd /tmp/efs; time find -L . -maxdepth 1 -type f | sudo parallel --jobs 0 rsync -avR {} /mnt/efs/
+<pre class="line-numbers  language-bash"><code>$ cd /tmp/efs; time find -L . -maxdepth 1 -type f | sudo parallel --jobs 0 rsync -avR {} /mnt/efs/
 ...
 real    3m25.578s
 user    1m2.320s
@@ -395,7 +475,7 @@ sys     0m45.163s
         <link href="https://devcloud.co.za/improving-efs-performance-part-1.html"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-1.html</id>
 
-        <updated>2020-07-20T21:12:55+02:00</updated>
+        <updated>2020-07-24T00:21:39+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
