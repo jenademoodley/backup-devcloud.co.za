@@ -14,10 +14,10 @@
         <author>
             <name>Jenade Moodley</name>
         </author>
-        <link href="https://devcloud.co.za/ecs-dynamic-port-mapping.html"/>
-        <id>https://devcloud.co.za/ecs-dynamic-port-mapping.html</id>
+        <link href="https://devcloud.co.za/ecs-dynamic-port-mapping/"/>
+        <id>https://devcloud.co.za/ecs-dynamic-port-mapping/</id>
 
-        <updated>2020-07-24T00:21:39+02:00</updated>
+        <updated>2020-07-24T00:34:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
@@ -94,10 +94,10 @@
         <author>
             <name>Jenade Moodley</name>
         </author>
-        <link href="https://devcloud.co.za/about-this-website.html"/>
-        <id>https://devcloud.co.za/about-this-website.html</id>
+        <link href="https://devcloud.co.za/about-this-website/"/>
+        <id>https://devcloud.co.za/about-this-website/</id>
 
-        <updated>2020-07-24T00:21:39+02:00</updated>
+        <updated>2020-07-24T00:34:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
@@ -143,10 +143,10 @@
         <author>
             <name>Jenade Moodley</name>
         </author>
-        <link href="https://devcloud.co.za/improving-efs-performance-part-2.html"/>
-        <id>https://devcloud.co.za/improving-efs-performance-part-2.html</id>
+        <link href="https://devcloud.co.za/improving-efs-performance-part-2/"/>
+        <id>https://devcloud.co.za/improving-efs-performance-part-2/</id>
 
-        <updated>2020-07-24T00:21:39+02:00</updated>
+        <updated>2020-07-24T00:34:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -158,7 +158,7 @@
                     <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
                 
   <p>
-    As discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-1.html">part 1</a> of this blog post, the latency which occurs with EFS is per-file operation latency due to the nature of the NFS protocol, specifically with handling metadata. In order to improve performance of your application, you need to understand the nature of your application, i.e. is your application performing mainly read or write operations. There are a few ways to determine this, which is discussed in the NFS troubleshooting blog post, however an easy way to determine the activity of your EFS on your EC2 instance is to use the <code>mountstats</code> command.
+    As discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-1/">part 1</a> of this blog post, the latency which occurs with EFS is per-file operation latency due to the nature of the NFS protocol, specifically with handling metadata. In order to improve performance of your application, you need to understand the nature of your application, i.e. is your application performing mainly read or write operations. There are a few ways to determine this, which is discussed in the NFS troubleshooting blog post, however an easy way to determine the activity of your EFS on your EC2 instance is to use the <code>mountstats</code> command.
   </p>
 <pre class="line-numbers  language-bash"><code>$ mountstats /mnt/efs
 Stats for 127.0.0.1:/ mounted on /mnt/efs:
@@ -472,10 +472,10 @@ sys     0m45.163s
         <author>
             <name>Jenade Moodley</name>
         </author>
-        <link href="https://devcloud.co.za/improving-efs-performance-part-1.html"/>
-        <id>https://devcloud.co.za/improving-efs-performance-part-1.html</id>
+        <link href="https://devcloud.co.za/improving-efs-performance-part-1/"/>
+        <id>https://devcloud.co.za/improving-efs-performance-part-1/</id>
 
-        <updated>2020-07-24T00:21:39+02:00</updated>
+        <updated>2020-07-24T00:34:20+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -535,7 +535,7 @@ sys     0m45.163s
     </h2>
 
   <p>
-    Now that we understand what causes latency with the EFS, we can go ahead and start looking methods for improving the performance of the applications which use the EFS. This is discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-2.html">second part of this blog post</a>.
+    Now that we understand what causes latency with the EFS, we can go ahead and start looking methods for improving the performance of the applications which use the EFS. This is discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-2/">second part of this blog post</a>.
   </p>
             ]]>
         </content>

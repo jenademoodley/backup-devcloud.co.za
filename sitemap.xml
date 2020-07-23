@@ -5,7 +5,7 @@
 <loc>https://devcloud.co.za/</loc>
 </url>
 <url>
-<loc>https://devcloud.co.za/about-this-website.html</loc>
+<loc>https://devcloud.co.za/about-this-website/</loc>
 <lastmod>2020-07-20T21:12:22+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\8/Optimizing-Images-for-The-Web.jpg</image:loc>
@@ -13,7 +13,7 @@
 </image:image>
 </url>
 <url>
-<loc>https://devcloud.co.za/ecs-dynamic-port-mapping.html</loc>
+<loc>https://devcloud.co.za/ecs-dynamic-port-mapping/</loc>
 <lastmod>2020-07-24T00:19:40+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\9/alb-arch.png</image:loc>
@@ -21,7 +21,7 @@
 </image:image>
 </url>
 <url>
-<loc>https://devcloud.co.za/improving-efs-performance-part-1.html</loc>
+<loc>https://devcloud.co.za/improving-efs-performance-part-1/</loc>
 <lastmod>2020-07-18T01:14:06+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\6/AWS_EFS-system_DIMq8h4.jpg</image:loc>
@@ -29,7 +29,7 @@
 </image:image>
 </url>
 <url>
-<loc>https://devcloud.co.za/improving-efs-performance-part-2.html</loc>
+<loc>https://devcloud.co.za/improving-efs-performance-part-2/</loc>
 <lastmod>2020-07-23T21:17:03+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\7/AWS_EFS-system_DIMq8h4.jpg</image:loc>
