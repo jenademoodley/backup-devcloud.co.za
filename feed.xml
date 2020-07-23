@@ -10,6 +10,29 @@
     <id>https://devcloud.co.za</id>
 
     <entry>
+        <title>ALB - Least Outstanding Request</title>
+        <author>
+            <name>Jenade Moodley</name>
+        </author>
+        <link href="https://devcloud.co.za/alb-least-outstanding-request/"/>
+        <id>https://devcloud.co.za/alb-least-outstanding-request/</id>
+
+        <updated>2020-07-24T00:36:36+02:00</updated>
+            <summary>
+                <![CDATA[
+                     
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                
+  <p>
+    
+  </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>ECS - Dynamic Port Mapping</title>
         <author>
             <name>Jenade Moodley</name>
@@ -17,7 +40,7 @@
         <link href="https://devcloud.co.za/ecs-dynamic-port-mapping/"/>
         <id>https://devcloud.co.za/ecs-dynamic-port-mapping/</id>
 
-        <updated>2020-07-24T00:34:20+02:00</updated>
+        <updated>2020-07-24T00:36:36+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
@@ -97,7 +120,7 @@
         <link href="https://devcloud.co.za/about-this-website/"/>
         <id>https://devcloud.co.za/about-this-website/</id>
 
-        <updated>2020-07-24T00:34:20+02:00</updated>
+        <updated>2020-07-24T00:36:36+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
@@ -146,7 +169,7 @@
         <link href="https://devcloud.co.za/improving-efs-performance-part-2/"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-2/</id>
 
-        <updated>2020-07-24T00:34:20+02:00</updated>
+        <updated>2020-07-24T00:36:36+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -475,7 +498,7 @@ sys     0m45.163s
         <link href="https://devcloud.co.za/improving-efs-performance-part-1/"/>
         <id>https://devcloud.co.za/improving-efs-performance-part-1/</id>
 
-        <updated>2020-07-24T00:34:20+02:00</updated>
+        <updated>2020-07-24T00:36:36+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
