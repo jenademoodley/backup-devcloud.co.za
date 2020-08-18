@@ -47,6 +47,10 @@
 </image:image>
 </url>
 <url>
+<loc>https://devcloud.co.za/ecs-monitor-container-level-cpu-and-memory-using-docker-stats-and-cloudwatch-metrics/</loc>
+<lastmod>2020-08-18T19:08:24+02:00</lastmod>
+</url>
+<url>
 <loc>https://devcloud.co.za/improving-efs-performance-part-1/</loc>
 <lastmod>2020-08-12T10:41:50+02:00</lastmod>
 <image:image>
@@ -61,6 +65,9 @@
 <image:loc>https://devcloud.co.za/media\posts\7/AWS_EFS-system_DIMq8h4.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
+</url>
+<url>
+<loc>https://devcloud.co.za/page/2/</loc>
 </url>
 <url>
 <loc>https://devcloud.co.za/the-nfs-buffer-cache/</loc>
