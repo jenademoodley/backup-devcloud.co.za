@@ -15,13 +15,17 @@
             "title": "ECS - Monitor container-level CPU and memory using Docker stats and CloudWatch metrics",
             "summary": " When using ECS, you run containers in the form of an ECS task, where each task can contain one or more container definitions, up to a maximum of 10. If you want to monitor the performance of your tasks, you can monitor the containers&hellip;",
             "content_html": "\n  <p>\n    When using ECS, you run containers in the form of an ECS task, where each task can contain one or more container definitions, up to a maximum of 10. If you want to monitor the performance of your tasks, you can monitor the containers at the task level. This does offer good insight into the working of your task, but it doesn't allow you to view the performance of each container. In a delicate environment where you need to monitor each and every aspect of the system, monitoring each container would be extremely beneficial. There is no CloudWatch metric which monitors container-level resource usage, but it is possible to build our own CloudWatch metric using the container-level resource usage statistics provided by the Docker daemon on the EC2 host. These statistics are obtained by the more widely known <code>docker stats</code> command.\n  </p>\n\n  <p>\n    The <code>docker stats</code> command returns a live data stream for running containers. With this command, you would be able to obtain the CPU, memory, network I/O, as well as disk I/O usage of each container. For this post, I will only be covering CPU and memory usage. You can take a more detailed look at <code>docker stats</code> from <a href=\"https://docs.docker.com/engine/reference/commandline/stats/\" target=\"_blank\">Docker's documentation</a>.\n  </p>\n\n  <p>\n    To provide a short overview of the steps we will be deploying, we will first create a script which obtains the resource usage statistics using <code>docker stats</code>, and upload these values to CloudWatch metrics. The statistics obtained will need to be easily obtained and parsed, hence the statistics will be obtained as a <code>JSON</code>, and be parsed using <code>jq</code> (more on this below). This script needs to be run at set intervals in order to gain a good understanding of the container resource usage patterns. To do this, we will create a cron job which will run this script at a set frequency.\n  </p>\n\n    <h2 id=\"installing-the-dependencies\">\n      Installing the dependencies\n    </h2>\n\n  <p>\n    As we will be sending the metrics to CloudWatch, and parsing through the <code>JSON</code> statistics using <code>jq</code>, we need to install the AWS CLI, as well as the <code>jq</code> binary. As you are using ECS, you would most likely be using the ECS-optimized AMI, which is based on Amazon Linux, or Amazon Linux 2. As such, the commands you would use to install these dependencies would be as below:\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>sudo yum install python3 python3-pip jq -y\nsudo pip3 install -U awscli</code></pre>\n\n    <h2 id=\"creating-the-script\">\n      Creating the script\n    </h2>\n\n  <p>\n    Let's first look at the commands which will be included in the script.\n  </p>\n\n  <p>\n    We first need to obtain the resource usage statistics using <code>docker stats</code>. By default,<code> docker stats</code> is presented as text, which is not very easy to handle when trying to filter for specific values. As such, we can format the statistics into a <code>JSON</code> using the <code>--format</code> parameter. This will be based on a publicly available example <a href=\"https://gist.github.com/KyleBanks/8befbf0ae0d0535fa27d33cb67b40bd1\" target=\"_blank\">docker-stats-json</a>. The statistics will then be formed into a valid <code>JSON</code> object using <code>jq</code>.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>STATS=$(docker stats --no-stream --format \"{\\\"container\\\": \\\"{{ .Container }}\\\",\\\"name\\\": \\\"{{ .Name }}\\\", \\\"memory\\\": { \\\"raw\\\": \\\"{{ .MemUsage }}\\\", \\\"percent\\\": \\\"{{ .MemPerc }}\\\"}, \\\"cpu\\\": \\\"{{ .CPUPerc }}\\\"}\" | jq '.' -s -c )</code></pre>\n\n  <p>\n    As we will be uploading the data to CloudWatch metrics, CloudWatch is region-specific. As such we also need to include the region in our script. We can obtain the region programmatically from the metadata service.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region 2&gt; /dev/null)</code></pre>\n\n  <p>\n    We also need a way to identify and structure our metrics in CloudWatch. One good way to manage this is to use the EC2 instance ID as a dimension for the metric, as well as the Container Name, and Container ID. This will allow us to identify the exact container which provided the metric. As such, we first need the EC2 instance ID, which can also be obtained from the instance metadata.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id 2&gt; /dev/null)</code></pre>\n\n  <p>\n    Finally, we need to parse through the JSON to obtain the Container Name, Container ID, CPU, and Memory usage of each container. To do this we first need to obtain the total number of containers.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>NUM_CONTAINERS=$(echo \"$STATS\" | jq '. | length')</code></pre>\n\n  <p>\n    We then iterate through the JSON to obtain the values we need.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>for (( i=0; i&lt;$NUM_CONTAINERS; i++ )) \ndo CPU=$(echo \"$STATS\" | jq -r .[$i].cpu | sed 's/%//')\nMEMORY=$(echo \"$STATS\" | jq -r .[$i].memory.percent | sed 's/%//')\nCONTAINER=$(echo $STATS | jq -r .[$i].container)\nCONTAINER_NAME=$(echo $STATS | jq -r .[$i].name)</code></pre>\n\n  <p>\n    And then upload these values to CloudWatch metrics using the AWS CLI.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>/usr/local/bin/aws cloudwatch put-metric-data --metric-name CPU --namespace DockerStats --unit Percent --value $CPU --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\n/usr/local/bin/aws cloudwatch put-metric-data --metric-name Memory --namespace DockerStats --unit Percent --value $MEMORY --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\ndone</code></pre>\n\n  <p>\n    Putting it all together, the completed script should look as below.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>#!/bin/bash\n\nREGION=$(curl http://169.254.169.254/latest/meta-data/placement/region 2&gt; /dev/null)\nINSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id 2&gt; /dev/null)\nSTATS=$(docker stats --no-stream --format \"{\\\"container\\\": \\\"{{ .Container }}\\\",\\\"name\\\": \\\"{{ .Name }}\\\", \\\"memory\\\": { \\\"raw\\\": \\\"{{ .MemUsage }}\\\", \\\"percent\\\": \\\"{{ .MemPerc }}\\\"}, \\\"cpu\\\": \\\"{{ .CPUPerc }}\\\"}\" | jq '.' -s -c )\nNUM_CONTAINERS=$(echo \"$STATS\" | jq '. | length')\n\nfor (( i=0; i&lt;$NUM_CONTAINERS; i++ )) \ndo CPU=$(echo \"$STATS\" | jq -r .[$i].cpu | sed 's/%//')\nMEMORY=$(echo \"$STATS\" | jq -r .[$i].memory.percent | sed 's/%//')\nCONTAINER=$(echo $STATS | jq -r .[$i].container)\nCONTAINER_NAME=$(echo $STATS | jq -r .[$i].name)\n\n/usr/local/bin/aws cloudwatch put-metric-data --metric-name CPU --namespace DockerStats --unit Percent --value $CPU --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\n/usr/local/bin/aws cloudwatch put-metric-data --metric-name Memory --namespace DockerStats --unit Percent --value $MEMORY --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\n\ndone</code></pre>\n\n    <h2 id=\"creating-the-cron-job\">\n      Creating the Cron job\n    </h2>\n\n  <p>\n    For the sake of simplicity, I have placed the above script at&nbsp;<code>/opt/docker-stats-monitor/monitor.sh</code> in my EC2 instance.\n  </p>\n\n  <p>\n    We first need to make the above script executable.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>chmod +x /opt/docker-stats-monitor/monitor.sh</code></pre>\n\n  <p>\n    We then need to create the cron job by creating a file in /etc/cron.d.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d/docker-stats</code></pre>\n\n  <p>\n    The above example creates a cron job which obtains and uploads the resource-usage statistics every minute. You can adjust the frequency by changing the <a href=\"https://crontab.guru/\" target=\"_blank\">cron schedule expression</a>.\n  </p>\n\n    <h2 id=\"the-results\">\n      The Results\n    </h2>\n\n    <figure class=\"post__image post__image--wide\">\n      <img loading=\"lazy\" src=\"https://devcloud.co.za/media/posts/13/Annotation-2020-08-18-184055-2.jpg\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-xs.jpg 300w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-sm.jpg 480w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-md.jpg 768w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-lg.jpg 1024w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-xl.jpg 1360w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-2xl.jpg 1600w\"  height=\"577\" width=\"1454\" alt=\"\" />\n      <figcaption>Docker stats as CloudWatch Metrics</figcaption>\n    </figure>\n\n    <h2 id=\"automating-the-procedure\">\n      Automating the Procedure\n    </h2>\n\n  <p>\n    When using ECS, you would hardly access the EC2 host, if at all. You would also most likely be incorporating Auto Scaling or Capacity Providers to launch the EC2 instance, hence you cannot SSH into each instance to configure this setup. To make this a plausible solution, you can implement the above steps using a <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html\" target=\"_blank\">User Data script</a>.\n  </p>\n<pre class=\"line-numbers  language-bash\"><code>#!/bin/bash\n\nyum install python3 python3-pip jq -y\npip3 install -U awscli\n\nmkdir -p /opt/docker-stats-monitor\n\ncat &gt; /opt/docker-stats-monitor/monitor.sh &lt;&lt; 'EOF'\n#!/bin/bash\n\nREGION=$(curl http://169.254.169.254/latest/meta-data/placement/region 2&gt; /dev/null)\n\nINSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id 2&gt; /dev/null)\n\nSTATS=$(docker stats --no-stream --format \"{\\\"container\\\": \\\"{{ .Container }}\\\",\\\"name\\\": \\\"{{ .Name }}\\\", \\\"memory\\\": { \\\"raw\\\": \\\"{{ .MemUsage }}\\\", \\\"percent\\\": \\\"{{ .MemPerc }}\\\"}, \\\"cpu\\\": \\\"{{ .CPUPerc }}\\\"}\" | jq '.' -s -c )\n\nNUM_CONTAINERS=$(echo \"$STATS\" | jq '. | length')\n\nfor (( i=0; i&lt;$NUM_CONTAINERS; i++ )) \ndo CPU=$(echo \"$STATS\" | jq -r .[$i].cpu | sed 's/%//')\nMEMORY=$(echo \"$STATS\" | jq -r .[$i].memory.percent | sed 's/%//')\nCONTAINER=$(echo $STATS | jq -r .[$i].container)\nCONTAINER_NAME=$(echo $STATS | jq -r .[$i].name)\n\n/usr/local/bin/aws cloudwatch put-metric-data --metric-name CPU --namespace DockerStats --unit Percent --value $CPU --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\n\n/usr/local/bin/aws cloudwatch put-metric-data --metric-name Memory --namespace DockerStats --unit Percent --value $MEMORY --dimensions InstanceId=$INSTANCE_ID,ContainerId=$CONTAINER,ContainerName=$CONTAINER_NAME --region $REGION\n\ndone\nEOF\n\nchmod +x /opt/docker-stats-monitor/monitor.sh\n\necho '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d/docker-stats</code></pre>\n\n    <h2 id=\"conclusion\">\n      Conclusion\n    </h2>\n\n  <p>\n    This is a feasible solution for monitoring Docker containers, however one big caveat which you would have noticed is that this solution requires running commands on the EC2 host used for running the containers. This means that this solution can only work for tasks using the EC2 Launch Type, and will not work for Fargate tasks.\n  </p>\n\n  <p>\n    And that's all there is to it. Let me know your thoughts in the comments below, and feel free to adjust these steps to meet your use-case, and share with the rest of the community.\n  </p>",
+            "image": "https://devcloud.co.za/media/posts/13/check-the-version-with-fixes-link-in-description-29-638.jpg",
             "author": {
                 "name": "Jenade Moodley"
             },
             "tags": [
+                   "ECS",
+                   "Docker",
+                   "AWS"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/about-me/",
@@ -35,8 +39,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/the-nfs-buffer-cache/",
@@ -51,8 +55,8 @@
                    "NFS",
                    "Linux"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/understanding-alb-least-outstanding-request/",
@@ -67,8 +71,8 @@
                    "AWS",
                    "ALB"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/ecs-dynamic-port-mapping/",
@@ -85,8 +89,8 @@
                    "AWS",
                    "ALB"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/about-this-website/",
@@ -100,8 +104,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/improving-efs-performance-part-2/",
@@ -118,8 +122,8 @@
                    "EFS",
                    "AWS"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         },
         {
             "id": "https://devcloud.co.za/improving-efs-performance-part-1/",
@@ -136,8 +140,8 @@
                    "EFS",
                    "AWS"
             ],
-            "date_published": "2020-08-18T19:09:02+02:00",
-            "date_modified": "2020-08-18T19:09:02+02:00"
+            "date_published": "2020-08-18T19:13:48+02:00",
+            "date_modified": "2020-08-18T19:13:48+02:00"
         }
     ]
 }

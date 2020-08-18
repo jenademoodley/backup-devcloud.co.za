@@ -27,6 +27,9 @@
 <loc>https://devcloud.co.za/blog/aws/</loc>
 </url>
 <url>
+<loc>https://devcloud.co.za/blog/docker/</loc>
+</url>
+<url>
 <loc>https://devcloud.co.za/blog/ecs/</loc>
 </url>
 <url>
@@ -48,7 +51,11 @@
 </url>
 <url>
 <loc>https://devcloud.co.za/ecs-monitor-container-level-cpu-and-memory-using-docker-stats-and-cloudwatch-metrics/</loc>
-<lastmod>2020-08-18T19:08:24+02:00</lastmod>
+<lastmod>2020-08-18T19:13:42+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\13/check-the-version-with-fixes-link-in-description-29-638.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
 </url>
 <url>
 <loc>https://devcloud.co.za/improving-efs-performance-part-1/</loc>
