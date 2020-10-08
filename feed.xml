@@ -19,7 +19,7 @@
             <category term="ECS"/>
             <category term="AWS"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/14/df8a5c58-68a2-4f99-bc4d-3e080890d13a.jpg" alt="" />
@@ -270,7 +270,7 @@
             <category term="Docker"/>
             <category term="AWS"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/13/check-the-version-with-fixes-link-in-description-29-638.jpg" alt="" />
@@ -394,10 +394,16 @@ done</code></pre>
       The Results
     </h2>
 
-    <figure class="post__image post__image--wide">
-      <img loading="lazy" src="https://devcloud.co.za/media/posts/13/Annotation-2020-08-18-184055-2.jpg" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-xs.jpg 300w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-sm.jpg 480w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-md.jpg 768w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-lg.jpg 1024w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-xl.jpg 1360w ,https://devcloud.co.za/media/posts/13/responsive/Annotation-2020-08-18-184055-2-2xl.jpg 1600w"  height="577" width="1454" alt="" />
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="3">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/13/gallery/Annotation-2020-08-18-184055.jpg" data-size="1454x577">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/13/gallery/Annotation-2020-08-18-184055-thumbnail.jpg" height="286" width="720" alt="" />
+      </a>
       <figcaption>Docker stats as CloudWatch Metrics</figcaption>
     </figure>
+    </div>
+  </div>
 
     <h2 id="automating-the-procedure">
       Automating the Procedure
@@ -463,7 +469,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
         <link href="https://devcloud.co.za/about-me/"/>
         <id>https://devcloud.co.za/about-me/</id>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/12/wificoffeelaptop-1280x720-2.jpg" alt="" />
@@ -494,7 +500,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="NFS"/>
             <category term="Linux"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                      If you are using an NFS compatible Distributed File System (such as a Samba server or EFS), you may notice a slight delay when writing files to the file system, more specifically, when you create a new file from one of the NFS clients,&hellip;
@@ -548,7 +554,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="AWS"/>
             <category term="ALB"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                      If you are using an Application Load Balancer, you may have come across the "Least Outstanding Requests" (or LOR) load balancing algorithm. A load balancing algorithm dictates how requests are sent to targets. With the default round robin configuration, all requests will be split&hellip;
@@ -618,7 +624,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="AWS"/>
             <category term="ALB"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
@@ -698,7 +704,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
         <link href="https://devcloud.co.za/about-this-website/"/>
         <id>https://devcloud.co.za/about-this-website/</id>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
@@ -742,7 +748,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -1074,7 +1080,7 @@ sys     0m45.163s
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-10-08T17:55:33+02:00</updated>
+        <updated>2020-10-08T17:59:32+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
