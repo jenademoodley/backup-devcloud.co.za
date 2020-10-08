@@ -10,6 +10,256 @@
     <id>https://devcloud.co.za</id>
 
     <entry>
+        <title>How to store ECS Stopped Task Details</title>
+        <author>
+            <name>Jenade Moodley</name>
+        </author>
+        <link href="https://devcloud.co.za/how-to-store-ecs-stopped-task-details/"/>
+        <id>https://devcloud.co.za/how-to-store-ecs-stopped-task-details/</id>
+            <category term="ECS"/>
+            <category term="AWS"/>
+
+        <updated>2020-10-08T17:55:33+02:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://devcloud.co.za/media/posts/14/df8a5c58-68a2-4f99-bc4d-3e080890d13a.jpg" alt="" />
+                     The Importance of Stopped Task Details When you are running containers in ECS, there are times in which the task suddenly stops. Often times these tasks are part of an ECS service and so they will be restarted, but if your architect is not&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <img src="https://devcloud.co.za/media/posts/14/df8a5c58-68a2-4f99-bc4d-3e080890d13a.jpg" alt="" />
+                
+    <h3 id="the-importance-of-stopped-task-details">
+      The Importance of Stopped Task Details
+    </h3>
+
+  <p>
+    When you are running containers in ECS, there are times in which the task suddenly stops. Often times these tasks are part of an ECS service and so they will be restarted, but if your architect is not stateless and those stopped task caused errors, then the task stopping can cause an issue with your application. An example of this would be a container which uses socket connections such as Redis.
+  </p>
+
+  <p>
+    In such cases, knowing the cause of the task stopping would be of utmost importance as you would need to prevent the task from stopping again. This fact reigns true even more so in production environments, where you also need to report on why any failures occurred in the environment. On ECS, when a task is stopped, you would be able to view the stopped task in your ECS console. When you select your cluster, you can select the Tasks tab which contains a list of stopped tasks.
+  </p>
+
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="1">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-8.png" data-size="1444x307">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-8-thumbnail.png" height="153" width="720" alt="Stopped Task" />
+      </a>
+      <figcaption>Stopped Task</figcaption>
+    </figure>
+    </div>
+  </div>
+
+  <p>
+    You can also select the task to view even more task details, as well as the container details (including the exit code) from each container. The container code is extremely useful if the task was stopped due to a container level issue, such as out of memory errors.
+  </p>
+
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="3">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-9.png" data-size="1463x755">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-9-thumbnail.png" height="372" width="720" alt="" />
+      </a>
+      <figcaption>Additional Task Details</figcaption>
+    </figure><figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-10.png" data-size="1427x789">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-10-thumbnail.png" height="398" width="720" alt="" />
+      </a>
+      <figcaption>Container Details</figcaption>
+    </figure>
+    </div>
+  </div>
+
+    <h3 id="why-do-we-need-to-store-ecs-stopped-tasks">
+      Why do we Need to Store ECS Stopped Tasks?
+    </h3>
+
+  <p>
+    The above information is certainly useful. Unfortunately, stopped ECS task details only remain in the console for at least an hour, after which it is removed. If you notice that the task was stopped after an hour, chances are that you will not be able to view the reason why the task was stopped. This is mentioned in <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListTasks.html" target="_blank" class="" data-link-popup-id="1602168481251">AWS documentation</a>:<line-separator></line-separator>
+  </p>
+
+    <blockquote class="blockquote">
+      Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour.&nbsp;
+    </blockquote>
+
+    <h3 id="implementing-the-solution">
+      Implementing the Solution
+    </h3>
+
+  <p>
+    The solution is actually really simple. When a task is stopped, there is a <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html" target="_blank" class="" data-link-popup-id="1602169359179">CloudWatch event</a> which is triggered to signal that the state of a task has been changed. In ECS, this would be called a <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_cwe_events.html#ecs_task_events" target="_blank" class="" data-link-popup-id="1602169359179">Task state change event</a>. We can then use a service called <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/what-is-amazon-eventbridge.html" target="_blank" class="" data-link-popup-id="1602169359179">Amazon EventBridge</a>&nbsp;to react to this event, and store the details of the event in a <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html" target="_blank">CloudWatch log stream</a>.&nbsp;
+  </p>
+
+  <ol>
+    <li>To get started, first navigate to the <a href="https://console.aws.amazon.com/events/" target="_blank">Amazon EventBridge console</a>. Ensure that you are in the same region as the ECS cluster that you want to monitor.</li><li>In the navigation pane, choose <code>Rules</code>.</li><li>Choose <code>Create rule</code>.</li><li>Enter a name and description for the rule. A rule can't have the same name as another rule in the same Region and on the same event bus.</li><li>For <code>Define pattern</code>, choose <code>Event pattern</code>.</li><li>Choose <code>Custom pattern</code>.</li><li>Paste the below JSON snippet into the Event pattern text window and click <code>Save</code>.</li>
+  </ol>
+<pre class="line-numbers  language-json"><code>{
+  "detail-type": [
+    "ECS Task State Change"
+  ],
+  "source": [
+    "aws.ecs"
+  ],
+  "detail": {
+    "desiredStatus": [
+      "STOPPED"
+    ],
+    "lastStatus": [
+      "STOPPED"
+    ]
+  }
+}</code></pre>
+
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="3">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-11.png" data-size="823x715">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-11-thumbnail.png" height="626" width="720" alt="" />
+      </a>
+      
+    </figure>
+    </div>
+  </div>
+<div><ol start="8">
+<li>For <code>Select targets</code>, choose <code>CloudWatch log group</code>.
+</li>
+<li>Provide a name for the log group, or choose an existing log group.
+</li>
+<li>Click <code>Create</code>.</li></ol></div>
+
+    <h3 id="results">
+      Results
+    </h3>
+
+  <p>
+    Should a task be stopped for any reason, the details of the task will be saved to the log stream. The log will be saved under the task ID for the stopped task.
+  </p>
+
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="3">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-13-alt.png" data-size="1470x639">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-13-alt-thumbnail.png" height="313" width="720" alt="" />
+      </a>
+      
+    </figure>
+    </div>
+  </div>
+
+  <p>
+    The resulting log entry will contain a JSON output containing the stopped task details.
+  </p>
+<pre class="line-numbers  language-json"><code>{
+    "version": "0",
+    "id": "ba5eb4e7-60be-82a2-621a-4a1b11112b5b",
+    "detail-type": "ECS Task State Change",
+    "source": "aws.ecs",
+    "account": "&lt;ACCOUNT_ID_REDACTED&gt;",
+    "time": "2020-10-08T14:27:07Z",
+    "region": "eu-west-1",
+    "resources": [
+        "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:task/default/8993cbec849642b8a9e00da5a620c3fe"
+    ],
+    "detail": {
+        "attachments": [
+            {
+                "id": "a6fcab45-6aa4-4c37-bd0e-e1a2ad30a6d2",
+                "type": "eni",
+                "status": "DELETED",
+                "details": [
+                    {
+                        "name": "subnetId",
+                        "value": "subnet-b2bea0fb"
+                    },
+                    {
+                        "name": "networkInterfaceId",
+                        "value": "eni-05f85d6424640254e"
+                    },
+                    {
+                        "name": "macAddress",
+                        "value": "06:c5:43:de:e8:bf"
+                    },
+                    {
+                        "name": "privateIPv4Address",
+                        "value": "172.31.20.20"
+                    }
+                ]
+            }
+        ],
+        "availabilityZone": "eu-west-1b",
+        "clusterArn": "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:cluster/default",
+        "containers": [
+            {
+                "containerArn": "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:container/45d23d4f-2e5c-4781-8cd7-cb521deae872",
+                "exitCode": 0,
+                "lastStatus": "STOPPED",
+                "name": "Nginx",
+                "image": "nginx",
+                "runtimeId": "a8aece9082bd0901c023c191be013bbd11c129f288647dfa53002661d8285057",
+                "taskArn": "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:task/default/8993cbec849642b8a9e00da5a620c3fe",
+                "networkInterfaces": [
+                    {
+                        "attachmentId": "a6fcab45-6aa4-4c37-bd0e-e1a2ad30a6d2",
+                        "privateIpv4Address": "172.31.20.20"
+                    }
+                ],
+                "cpu": "0"
+            }
+        ],
+        "createdAt": "2020-10-08T14:25:20.227Z",
+        "launchType": "FARGATE",
+        "cpu": "512",
+        "memory": "1024",
+        "desiredStatus": "STOPPED",
+        "group": "service:nginx-service",
+        "lastStatus": "STOPPED",
+        "overrides": {
+            "containerOverrides": [
+                {
+                    "name": "Nginx"
+                }
+            ]
+        },
+        "connectivity": "CONNECTED",
+        "connectivityAt": "2020-10-08T14:25:33.981Z",
+        "pullStartedAt": "2020-10-08T14:25:39.75Z",
+        "startedAt": "2020-10-08T14:25:48.75Z",
+        "startedBy": "ecs-svc/0068978569384120015",
+        "stoppingAt": "2020-10-08T14:26:43.833Z",
+        "stoppedAt": "2020-10-08T14:27:07.323Z",
+        "pullStoppedAt": "2020-10-08T14:25:46.75Z",
+        "executionStoppedAt": "2020-10-08T14:26:44Z",
+        "stoppedReason": "Task stopped by user",
+        "stopCode": "UserInitiated",
+        "updatedAt": "2020-10-08T14:27:07.323Z",
+        "taskArn": "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:task/default/8993cbec849642b8a9e00da5a620c3fe",
+        "taskDefinitionArn": "arn:aws:ecs:eu-west-1:&lt;ACCOUNT_ID_REDACTED&gt;:task-definition/nginx-basic-fargate:1",
+        "version": 6,
+        "platformVersion": "1.3.0"
+    }
+}</code></pre>
+
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="3">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/14/gallery/Screenshot-16.png" data-size="1455x824">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/14/gallery/Screenshot-16-thumbnail.png" height="408" width="720" alt="" />
+      </a>
+      
+    </figure>
+    </div>
+  </div>
+
+  <p>
+    And that's about it. Very simple to setup, and very useful in the event when you do need to troubleshoot stopped tasks. Let me know your thoughts or any concerns in the comments below, and feel free to adjust these steps to meet your use-case.
+  </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>ECS - Monitor container-level CPU and memory using Docker stats and CloudWatch metrics</title>
         <author>
             <name>Jenade Moodley</name>
@@ -20,7 +270,7 @@
             <category term="Docker"/>
             <category term="AWS"/>
 
-        <updated>2020-08-20T18:26:17+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/13/check-the-version-with-fixes-link-in-description-29-638.jpg" alt="" />
@@ -213,7 +463,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
         <link href="https://devcloud.co.za/about-me/"/>
         <id>https://devcloud.co.za/about-me/</id>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/12/wificoffeelaptop-1280x720-2.jpg" alt="" />
@@ -244,7 +494,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="NFS"/>
             <category term="Linux"/>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                      If you are using an NFS compatible Distributed File System (such as a Samba server or EFS), you may notice a slight delay when writing files to the file system, more specifically, when you create a new file from one of the NFS clients,&hellip;
@@ -298,7 +548,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="AWS"/>
             <category term="ALB"/>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                      If you are using an Application Load Balancer, you may have come across the "Least Outstanding Requests" (or LOR) load balancing algorithm. A load balancing algorithm dictates how requests are sent to targets. With the default round robin configuration, all requests will be split&hellip;
@@ -368,7 +618,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="AWS"/>
             <category term="ALB"/>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/9/alb-arch.png" alt="" />
@@ -448,7 +698,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
         <link href="https://devcloud.co.za/about-this-website/"/>
         <id>https://devcloud.co.za/about-this-website/</id>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/8/Optimizing-Images-for-The-Web.jpg" alt="" />
@@ -492,7 +742,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -824,7 +1074,7 @@ sys     0m45.163s
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-08-20T18:26:18+02:00</updated>
+        <updated>2020-10-08T17:55:33+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />

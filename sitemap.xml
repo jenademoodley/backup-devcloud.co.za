@@ -27,6 +27,9 @@
 <loc>https://devcloud.co.za/blog/aws/</loc>
 </url>
 <url>
+<loc>https://devcloud.co.za/blog/aws/page/2/</loc>
+</url>
+<url>
 <loc>https://devcloud.co.za/blog/docker/</loc>
 </url>
 <url>
@@ -54,6 +57,14 @@
 <lastmod>2020-08-20T18:26:11+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\13/check-the-version-with-fixes-link-in-description-29-638.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
+</url>
+<url>
+<loc>https://devcloud.co.za/how-to-store-ecs-stopped-task-details/</loc>
+<lastmod>2020-10-08T17:55:27+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\14/df8a5c58-68a2-4f99-bc4d-3e080890d13a.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
