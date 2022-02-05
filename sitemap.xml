@@ -27,9 +27,6 @@
 <loc>https://devcloud.co.za/blog/aws/</loc>
 </url>
 <url>
-<loc>https://devcloud.co.za/blog/aws/page/2/</loc>
-</url>
-<url>
 <loc>https://devcloud.co.za/blog/docker/</loc>
 </url>
 <url>
@@ -83,9 +80,6 @@
 <image:loc>https://devcloud.co.za/media\posts\7/AWS_EFS-system_DIMq8h4.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
-</url>
-<url>
-<loc>https://devcloud.co.za/page/2/</loc>
 </url>
 <url>
 <loc>https://devcloud.co.za/the-nfs-buffer-cache/</loc>

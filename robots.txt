@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://devcloud.co.za/sitemap.xml
