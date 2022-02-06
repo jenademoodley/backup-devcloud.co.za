@@ -3,7 +3,7 @@
     <title>DevCloud</title>
     <link href="https://devcloud.co.za/feed.xml" rel="self" />
     <link href="https://devcloud.co.za" />
-    <updated>2020-10-08T18:21:29+02:00</updated>
+    <updated>2022-02-07T00:12:01+02:00</updated>
     <author>
         <name>Jenade Moodley</name>
     </author>
@@ -748,7 +748,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
         </content>
     </entry>
     <entry>
-        <title>Improving EFS Performance (Part 2)</title>
+        <title>Improving EFS Performance</title>
         <author>
             <name>Jenade Moodley</name>
         </author>
@@ -758,7 +758,7 @@ echo '* * * * * root bash /opt/docker-stats-monitor/monitor.sh' &gt; /etc/cron.d
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-08-12T10:42:11+02:00</updated>
+        <updated>2022-02-07T00:12:01+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/7/AWS_EFS-system_DIMq8h4.jpg" alt="" />
@@ -1080,7 +1080,7 @@ sys     0m45.163s
         </content>
     </entry>
     <entry>
-        <title>Improving EFS Performance (Part 1)</title>
+        <title>Why is my EFS slow?</title>
         <author>
             <name>Jenade Moodley</name>
         </author>
@@ -1090,21 +1090,17 @@ sys     0m45.163s
             <category term="EFS"/>
             <category term="AWS"/>
 
-        <updated>2020-08-12T10:41:50+02:00</updated>
+        <updated>2022-02-07T00:11:52+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
-                     Why is my EFS slow? If you have started using EFS as the main root storage for your application such as your WordPress website, or a common storage layer for your containerized applications, you may notice that the performance obtained when using the EFS&hellip;
+                     If you have started using EFS as the main root storage for your application such as your WordPress website, or a common storage layer for your containerized applications, you may notice that the performance obtained when using the EFS appears to be slower than&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
                     <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
                 
-    <h2 id="why-is-my-efs-slow">
-      Why is my EFS slow?
-    </h2>
-
   <p>
     If you have started using EFS as the main root storage for your application such as your WordPress website, or a common storage layer for your containerized applications, you may notice that the performance obtained when using the EFS appears to be slower than using regular disks. This slowness is not caused deliberately, rather it is due to the nature of EFS.&nbsp;
   </p>
