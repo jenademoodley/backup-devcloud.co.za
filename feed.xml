@@ -3,7 +3,7 @@
     <title>DevCloud</title>
     <link href="https://devcloud.co.za/feed.xml" rel="self" />
     <link href="https://devcloud.co.za" />
-    <updated>2022-02-10T23:42:58+02:00</updated>
+    <updated>2022-02-11T00:01:05+02:00</updated>
     <author>
         <name>Jenade Moodley</name>
     </author>
@@ -18,7 +18,7 @@
         <id>https://devcloud.co.za/diagnosing-ec2-performance-issues/</id>
             <category term="EC2"/>
 
-        <updated>2022-02-10T23:42:58+02:00</updated>
+        <updated>2022-02-11T00:01:05+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/15/How-Fast-or-Slow-Are-Turtles.jpg" alt="" />
@@ -45,10 +45,16 @@
       CloudWatch metrics for your EC2 instance
     </h2>
 
-    <figure class="post__image post__image--center">
-      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-74.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-xs.png 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-sm.png 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-md.png 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-lg.png 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-xl.png 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-2xl.png 1600w"  height="559" width="1809" alt="" />
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="1">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/15/gallery/Screenshot-74.png" data-size="1809x559">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/15/gallery/Screenshot-74-thumbnail.png" height="237" width="768" alt="" />
+      </a>
       <figcaption>EC2 CloudWatch Metrics</figcaption>
     </figure>
+    </div>
+  </div>
 
   <p>
     If you were to select the "Monitoring" tab in your EC2 console, you would see a bunch of metrics related to your EC2 instance. You can see the CPU usage (CPUUtilization, and CPUCreditBalance which is explained further below) and Network usage (NetworkIn, NetworkOut, NetworkPacketsIn, NetworkPacketsOut). A full list of metrics are listed in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html" target="_blank">AWS EC2 documentation</a>.&nbsp;
@@ -58,10 +64,16 @@
     However, you may notice that there are DiskReadOps and DiskWriteOps metrics, but these metrics are sometimes empty. This is because these metrics refer to instance storage volumes, and would thus only be populated for instances which are configured to use instance store. The storage used by most instances, and is the root volume for all current generation instance types, are EBS volumes. EBS volumes are decoupled from EC2 instances to ensure availability of your data when there are issues with your instance. As such, you would need to navigate to the EBS console and locate the volumes attached to your instance in order to view your EBS usage.
   </p>
 
-    <figure class="post__image post__image--center">
-      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-76.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-xs.png 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-sm.png 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-md.png 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-lg.png 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-xl.png 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-2xl.png 1600w"  height="474" width="1765" alt="" />
+  <div  class="gallery-wrapper gallery-wrapper--center">
+    <div class="gallery" data-columns="1">
+      <figure class="gallery__item">
+      <a href="https://devcloud.co.za/media/posts/15/gallery/Screenshot-76.png" data-size="1765x474">
+        <img loading="lazy" src="https://devcloud.co.za/media/posts/15/gallery/Screenshot-76-thumbnail.png" height="206" width="768" alt="" />
+      </a>
       <figcaption>EBS CloudWatch Usage</figcaption>
     </figure>
+    </div>
+  </div>
 
   <p>
     And finally, there are no metrics for memory usage. AWS does not record memory usage of your EC2 instance by default. In order to record the memory usage, you need to perform the additional step of <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html" target="_blank">setting up the CloudWatch agent to send memory usage to CloudWatch</a>.
