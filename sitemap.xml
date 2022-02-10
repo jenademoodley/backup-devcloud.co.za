@@ -30,6 +30,9 @@
 <loc>https://devcloud.co.za/blog/docker/</loc>
 </url>
 <url>
+<loc>https://devcloud.co.za/blog/ec2/</loc>
+</url>
+<url>
 <loc>https://devcloud.co.za/blog/ecr/</loc>
 </url>
 <url>
@@ -46,6 +49,14 @@
 </url>
 <url>
 <loc>https://devcloud.co.za/blog/nfs/</loc>
+</url>
+<url>
+<loc>https://devcloud.co.za/diagnosing-ec2-performance-issues/</loc>
+<lastmod>2022-02-10T23:42:58+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\15/How-Fast-or-Slow-Are-Turtles.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
 </url>
 <url>
 <loc>https://devcloud.co.za/ecs-dynamic-port-mapping/</loc>

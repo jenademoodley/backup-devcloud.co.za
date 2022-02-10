@@ -3,12 +3,231 @@
     <title>DevCloud</title>
     <link href="https://devcloud.co.za/feed.xml" rel="self" />
     <link href="https://devcloud.co.za" />
-    <updated>2022-02-10T18:30:25+02:00</updated>
+    <updated>2022-02-10T23:42:58+02:00</updated>
     <author>
         <name>Jenade Moodley</name>
     </author>
     <id>https://devcloud.co.za</id>
 
+    <entry>
+        <title>Diagnosing EC2 Performance Issues</title>
+        <author>
+            <name>Jenade Moodley</name>
+        </author>
+        <link href="https://devcloud.co.za/diagnosing-ec2-performance-issues/"/>
+        <id>https://devcloud.co.za/diagnosing-ec2-performance-issues/</id>
+            <category term="EC2"/>
+
+        <updated>2022-02-10T23:42:58+02:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://devcloud.co.za/media/posts/15/How-Fast-or-Slow-Are-Turtles.jpg" alt="" />
+                     If you are an AWS beginner, or even an avid AWS user, you may experience times when your EC2 instance grinds to a halt for no apparent reason. This impact to performance is because you hit a limit, and are now being throttled. In&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <img src="https://devcloud.co.za/media/posts/15/How-Fast-or-Slow-Are-Turtles.jpg" alt="" />
+                
+  <p>
+    If you are an AWS beginner, or even an avid AWS user, you may experience times when your EC2 instance grinds to a halt for no apparent reason. This impact to performance is because you hit a limit, and are now being throttled. In any server, there are four resources you need to monitor:
+  </p>
+
+  <ol>
+    <li>CPU</li><li>Memory (RAM)</li><li>Disk I/O</li><li>Network I/O</li>
+  </ol>
+
+  <p>
+    If even one of these hit a limit, you will experience slow performance on your server. EC2 instances are no different. You need to know how to diagnose which of the above resources are constrained. Luckily, AWS provides CloudWatch metrics you can use to get a quick glance at your instance to determine if you are experiencing any issues.
+  </p>
+
+    <h2 id="cloudwatch-metrics-for-your-ec2-instance">
+      CloudWatch metrics for your EC2 instance
+    </h2>
+
+    <figure class="post__image post__image--center">
+      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-74.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-xs.png 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-sm.png 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-md.png 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-lg.png 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-xl.png 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-74-2xl.png 1600w"  height="559" width="1809" alt="" />
+      <figcaption>EC2 CloudWatch Metrics</figcaption>
+    </figure>
+
+  <p>
+    If you were to select the "Monitoring" tab in your EC2 console, you would see a bunch of metrics related to your EC2 instance. You can see the CPU usage (CPUUtilization, and CPUCreditBalance which is explained further below) and Network usage (NetworkIn, NetworkOut, NetworkPacketsIn, NetworkPacketsOut). A full list of metrics are listed in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html" target="_blank">AWS EC2 documentation</a>.&nbsp;
+  </p>
+
+  <p>
+    However, you may notice that there are DiskReadOps and DiskWriteOps metrics, but these metrics are sometimes empty. This is because these metrics refer to instance storage volumes, and would thus only be populated for instances which are configured to use instance store. The storage used by most instances, and is the root volume for all current generation instance types, are EBS volumes. EBS volumes are decoupled from EC2 instances to ensure availability of your data when there are issues with your instance. As such, you would need to navigate to the EBS console and locate the volumes attached to your instance in order to view your EBS usage.
+  </p>
+
+    <figure class="post__image post__image--center">
+      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-76.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-xs.png 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-sm.png 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-md.png 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-lg.png 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-xl.png 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-76-2xl.png 1600w"  height="474" width="1765" alt="" />
+      <figcaption>EBS CloudWatch Usage</figcaption>
+    </figure>
+
+  <p>
+    And finally, there are no metrics for memory usage. AWS does not record memory usage of your EC2 instance by default. In order to record the memory usage, you need to perform the additional step of <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html" target="_blank">setting up the CloudWatch agent to send memory usage to CloudWatch</a>.
+  </p>
+
+  <p>
+    However, if you can't access the CloudWatch metrics in the console for some reason (maybe you are in an Organization, and you have not been granted access), you can still monitor all of the above metrics from within the EC2 instance. If you are using Linux, you can use the <code>top</code> command to obtain an overview of your system, and on Windows you can use Task Manager.
+  </p>
+
+    <h2 id="linux--the-top-command">
+      Linux - The top command
+    </h2>
+
+    <figure class="post__image post__image--center">
+      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-71.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-xs.png 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-sm.png 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-md.png 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-lg.png 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-xl.png 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-71-2xl.png 1600w"  height="624" width="1076" alt="" />
+      <figcaption>Linux top command output</figcaption>
+    </figure>
+
+  <p>
+    The top command is an easy way to gain an overview of the system. You can view the CPU and memory usage of your system, as well as per process. There are no readings for disk and network metrics, but we can diagnose if there are any issues with these metrics using the load average. The load average measures the amount of load on your system, and includes processes using CPU, as well as processes waiting to use CPU. Such processes contribute to the <code>iowait</code> metric. As such, if load average is high but CPU usage is low, then that means that your system is suffering from I/O wait. In this case, you would usually see a large number of processes stuck in D state, indicating they are waiting for I/O to complete.
+  </p>
+
+  <p>
+    However, if you would like to monitor network and disk I/O, you can look at using <a href="https://linux.die.net/man/1/sar"><code>sar</code></a>. <code>sar</code> is a very powerful tool which you can use to view and even record in-depth metrics on your system. <code>sar</code> is part of the <code>sysstat</code> package, hence you can simply install <code>sysstat</code> in order to begin using sar:
+  </p>
+
+    <h5 id="amazon-linux-centos-rhel">
+      Amazon Linux, CentOS, RHEL
+    </h5>
+<pre class="line-numbers  language-bash"><code>$ sudo yum install sysstat -y</code></pre>
+
+    <h5 id="ubuntu">
+      Ubuntu
+    </h5>
+<pre class="line-numbers  language-bash"><code>sudo apt-get update
+sudo apt-get install sysstat</code></pre>
+
+  <p>
+    I won't be going through all of <code>sar</code>, but you can view disk and network usage with the below commands:
+  </p>
+
+    <h5 id="disk">
+      Disk
+    </h5>
+<pre class="line-numbers  language-html"><code>$ sar -p -d 1 1
+Linux 4.14.256-197.484.amzn2.x86_64 (ip-10-0-138-139.eu-west-1.compute.internal)        02/10/22        _x86_64_        (2 CPU)
+
+17:45:01          DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
+17:45:02      nvme0n1      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+Average:          DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
+Average:      nvme0n1      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00</code></pre>
+
+    <h5 id="network">
+      Network
+    </h5>
+<pre class="line-numbers  language-html"><code>$ sar -n DEV 1 1
+Linux 4.14.256-197.484.amzn2.x86_64 (ip-10-0-138-139.eu-west-1.compute.internal)        02/10/22        _x86_64_        (2 CPU)
+
+17:45:41        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+17:45:42         eth0      2.00      0.00      0.09      0.00      0.00      0.00      0.00
+17:45:42           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+17:45:42      docker0      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+17:45:42         eth1      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+Average:         eth0      2.00      0.00      0.09      0.00      0.00      0.00      0.00
+Average:           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+Average:      docker0      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+Average:         eth1      0.00      0.00      0.00      0.00      0.00      0.00      0.00</code></pre>
+
+    <h2 id="windows--task-manager">
+      Windows - Task Manager
+    </h2>
+
+    <figure class="post__image post__image--center">
+      <img loading="lazy" src="https://devcloud.co.za/media/posts/15/Screenshot-2022-02-10-194153.jpg" sizes="(max-width: 48em) 100vw, 768px" srcset="https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-xs.jpg 300w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-sm.jpg 480w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-md.jpg 768w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-lg.jpg 1024w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-xl.jpg 1360w ,https://devcloud.co.za/media/posts/15/responsive/Screenshot-2022-02-10-194153-2xl.jpg 1600w"  height="1033" width="1125" alt="" />
+      <figcaption>Windows Task Manager Output</figcaption>
+    </figure>
+
+  <p>
+    The Windows task manager provides a graphical interface for you to view the overall metrics of your system. The graphs are intuitive and easy to understand.
+  </p>
+
+    <h2 id="what-do-i-look-for-in-the-monitoring-tools">
+      What do I look for in the monitoring tools?
+    </h2>
+
+  <p>
+    As you would have hit a limit for one of the above resources, you cannot use any more of that resource. Projecting that analogy to a graph, this would be seen by a <u>flat line</u>. A PC or server's usage of resources are not always exactly the same; there would be some slight variance over time. If there is a flat line for any metric, chances are that you are being throttled on that metric.
+  </p>
+
+  <p>
+    When you notice a flat line, you should check the details for your instance or EBS volume to determine the available limits. For CPU and memory, a value which is consistently at 100% is a sign of CPU and memory pressure. Similarly, Task Manager would also consistently be at 100%. In top, the output for %Cpu would show 0.0 idle indicating that the CPU is completely busy, and there would be no available memory.
+  </p>
+
+  <p>
+    On the other hand, network performance and EBS performance would have a definite value, not a percentage. If you hit a limit, the CloudWatch metric and Task Manager output would flatline at this value. In top, you would see a high value for load average, as well as a high value for iowait. If using sar, you would see that the values returned over a period of time would be similar in value.
+  </p>
+
+  <p>
+    However, there may be times when the network, CPU, or EBS performance flatlines, and the values seen are not the advertised limits. In this case, that resource is a burstable resource, and is being throttled on the baseline performance.
+  </p>
+
+    <h2 id="the-aws-burst-model">
+      The AWS Burst Model
+    </h2>
+
+  <p>
+    AWS incorporates a burst model when using a vast majority of their services. In an EC2 instance, as it is a VM and is on a shared underlying host with other customers, these limits are in place to ensure that you can go above your baseline limits during high workloads, but the throttle is in place so that other instances on the host are unaffected (this behaviour varies per instance type).&nbsp;
+  </p>
+
+  <p>
+    To explain the burst model, for a specific resource, you are allocated a baseline performance. The baseline performance is over a set time period, usually per second. However, to account for spikes in workloads, your instance can go above the baseline performance for a short period of time using burst credits. If you sustain this usage, the burst credits would steadily be used up until it is depleted, and then you will be throttled back to the baseline performance. If the usage drops below the baseline performance, burst credits would begin to accumulate once again.
+  </p>
+
+  <p>
+    To explain by means of an example, the t2.micro is a general performance instance type, with a burstable CPU performance. By default, it has 1 vCPU, and a baseline performance of 10% of that vCPU. As soon as you begin to use more than 10% CPU, CPU burst credits are used. As soon as the credits are exhausted, the instance is throttled to 10% CPU usage.
+  </p>
+
+  <p>
+    This burstable model is in place for the below resources:
+  </p>
+
+  <ul>
+    <li>CPU usage for T2, T3, T3a, and T4g instance types. The baseline performance differs between each instance type. These are referred to as <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html" target="_blank">Burstable Performance Instances</a>.</li><li>EBS IOPS usage on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2" target="_blank">gp2 EBS volumes</a>.</li><li>Network performance on a variety of instance types. This is documented in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-network-bandwidth.html" target="_blank">AWS EC2 documentation</a>.</li>
+  </ul>
+
+  <p>
+    CPU and EBS burst details are documented clearly, and you can measure the amount of burst balance remaining for each resource. However, you cannot view the burst balance for network performance. You can only view the baseline performance per instance type in the above documentation.
+  </p>
+
+    <h2 id="how-do-i-proceed-after-identifying-the-throttled-resource">
+      How do I proceed after identifying the throttled resource?
+    </h2>
+
+  <p>
+    The first step would be to try and fix the usage. In Task Manager, you can view which process is using up the specified resource. In top, you can identify which process is using up the most CPU and memory, as well as determine which processes are in D state to diagnose network and disk hungry processes. Once identified, you should examine each process to see if this is expected. You can check the logs for that process if possible to see of there was any unusual occurrences. However, if you notice that the resource was slowly and steadily increasing, odds are that your instance just got busier over time. However, do not just assume this, always try and confirm.
+  </p>
+
+  <p>
+    If you confirm the usage is expected, you then need to allocate more resources to handle the load. In order to increase the resources, you can look at scaling up, or scaling out. Scaling up refers to upgrading the instance type to one which has more of the specified resource. For example, if you are using a t2.micro, you can update to a t2.medium. Scaling out however means to increase the number of instances. This is useful if you are able to make use of multiple instances simultaneously in your application, for example, by means of a load balancer.&nbsp;
+  </p>
+
+  <p>
+    In the case of gp2 EBS volumes however, you should instead look at migrating to gp3 volumes. gp3 volumes do not use baseline performance and burst credits. You specify the IOPS and throughput you need, and you will receive consistent performance at those IOPS. g3 volumes are also slightly cheaper than gp2 volumes. For more information, you can refer to the <a href="https://aws.amazon.com/ebs/pricing/" target="_blank">EBS pricing page</a>.
+  </p>
+
+    <h2 id="summary">
+      Summary
+    </h2>
+
+  <p>
+    We can recap the above blog with these points:
+  </p>
+
+  <ul>
+    <li>Your instance can hit a limit on CPU, memory, network, and/or disk which can cause performance issues.&nbsp;</li><li>You can determine which resource is throttled using CloudWatch metrics, or using monitoring tools from within the instance.&nbsp;</li><li>When looking at usage, look for a flatline or similar values in the metrics.&nbsp;</li><li>Don't forget to take into account burstable resources when using certain instance types.</li><li>&nbsp;After identifying the issue, determine if this is expected or an anomaly.</li><li>If expected, you can scale up or scale out, depending on your business needs</li>
+  </ul>
+
+  <p>
+    This article can help those using EC2 and seeing performance issues, and provides and end-to-end guide of identifying the cause, and fixing the issue.&nbsp;
+  </p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>How does the Docker client authenticate to ECR?</title>
         <author>
@@ -1212,78 +1431,6 @@ sys     0m45.163s
 
   <p>
     Knowing your application's usage patterns can greatly assist you with configuring your EFS. Using the above suggestions correctly can help you to use the EFS to it's full potential, however incorrect use of these suggestions, such as implementing <code>cachefilesd</code> for an application which only accesses recent data on the EFS, can cause further performance degradation. There are additional caching options you can look at such as <a href="https://www.php.net/manual/en/book.opcache.php" target="_blank">PHP-opcache</a> for PHP-based websites, and incorporating a CDN such as <a href="https://aws.amazon.com/cloudfront/" target="_blank">CloudFront</a>, however these are website specific caching mechanisms. You need to identify a good mix of services and caching mechanisms in order to improve your application performance on EFS, and I hope this blog post gives you a good starting point on improving your experience with EFS.
-  </p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Why is my EFS slow?</title>
-        <author>
-            <name>Jenade Moodley</name>
-        </author>
-        <link href="https://devcloud.co.za/improving-efs-performance-part-1/"/>
-        <id>https://devcloud.co.za/improving-efs-performance-part-1/</id>
-            <category term="NFS"/>
-            <category term="EFS"/>
-            <category term="AWS"/>
-
-        <updated>2022-02-07T00:11:52+02:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
-                     If you have started using EFS as the main root storage for your application such as your WordPress website, or a common storage layer for your containerized applications, you may notice that the performance obtained when using the EFS appears to be slower than&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <img src="https://devcloud.co.za/media/posts/6/AWS_EFS-system_DIMq8h4.jpg" alt="" />
-                
-  <p>
-    If you have started using EFS as the main root storage for your application such as your WordPress website, or a common storage layer for your containerized applications, you may notice that the performance obtained when using the EFS appears to be slower than using regular disks. This slowness is not caused deliberately, rather it is due to the nature of EFS.&nbsp;
-  </p>
-
-  <p>
-    Using EFS without being aware of it's architecture and limitations can catch you unawares, however, by understanding how EFS works and the nature of your application, it is possible to boost the performance of your application using EFS (notice I said application performance and not EFS performance.)
-  </p>
-
-    <h2 id="efs-architecture">
-      EFS Architecture
-    </h2>
-
-  <p>
-    Straight from AWS' documentation, EFS is a distributed file system which is designed to be accessed by thousands of clients simultaneously, provide redundant and highly available storage across multiple availability zones, and provide low latency per-file operation. The latter of these claims otherwise towards the slowness experienced, however the key-words to remember is "per-file operation". It is an NFS file system, and is designed to be accessed via the NFS protocol. Supported versions of the protocol are NFS version 4, and NFS version 4.1 (preferred).
-  </p>
-
-  <p>
-    EFS manages all file storage infrastructure for you, and you only pay for the storage that you use. You do not have to provision any servers or instances, nor do you have to manage any storage or disks. It also guarantees "close-to-open" data consistency and supports POSIX permissions.
-  </p>
-
-    <h2 id="understanding-perfile-operation-latencynbsp">
-      Understanding "per-file operation" latency&nbsp;
-    </h2>
-
-  <p>
-    To understand why per-file operation latency can induce slowness, we first need to understand how the operating system works with files in general. EFS, at present, can only be accessed by Linux-based clients, and every single component of Linux, be it an application or configuration, consists of files. In short, every action on your Linux operating system requires accessing a file.
-  </p>
-
-  <p>
-    Unpacking that analogy, there are only two options which are applicable to the use of files; reading, and writing to a file. From the operating system's point of view, either of these actions is interpreted as an "operation", and there are appropriate read and write operations available as the operating system would need to perform different actions for these operations. This is unpacked further here (coming soon).
-  </p>
-
-  <p>
-    When reading or writing to a file, the operating system needs to first obtain the metadata for the file, which contains various information about the file including the inode of the file, the permissions to determine if the file is accessible by the user or application performing the operation, as well as the block size and IO block (location on the disk) for the actual data on the file. If the user or application has sufficient permissions to access the file, the operating system would then access the contents of the file from the disk.
-  </p>
-
-  <p>
-    Coming back to EFS, we know that EFS uses the NFS protocol to run file operations. What you may not know, is that NFS is not too efficient with handling metadata, which is necessary for all file operations. To briefly explain, your file would be located within a directory, such as the root EFS directory or several directories within the EFS. When trying to access a file, the NFS protocol will recursively check each directory to determine if the user has sufficient permissions to access each directory, before finally arriving at the specified file. As you are connecting to the EFS over a network, each of these checks is a Remote Procedure Call (RPC). As these checks occur over a network, while these checks occur very fast, they are much slower when compared to directly attached storage options. A deeper overview of the NFS protocol sequence is explained <a href="http://www.eventhelix.com/realtimemantra/networking/NFS_Protocol_Sequence_Diagram.pdf" target="_blank">here</a>.
-  </p>
-
-    <h2 id="whats-next">
-      What's next?
-    </h2>
-
-  <p>
-    Now that we understand what causes latency with the EFS, we can go ahead and start looking methods for improving the performance of the applications which use the EFS. This is discussed in the <a href="https://devcloud.co.za/improving-efs-performance-part-2/">second part of this blog post</a>.
   </p>
             ]]>
         </content>
