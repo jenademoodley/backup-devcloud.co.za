@@ -24,6 +24,9 @@
 <loc>https://devcloud.co.za/blog/alb/</loc>
 </url>
 <url>
+<loc>https://devcloud.co.za/blog/arm/</loc>
+</url>
+<url>
 <loc>https://devcloud.co.za/blog/aws/</loc>
 </url>
 <url>
@@ -49,6 +52,9 @@
 </url>
 <url>
 <loc>https://devcloud.co.za/blog/nfs/</loc>
+</url>
+<url>
+<loc>https://devcloud.co.za/blog/nvidia/</loc>
 </url>
 <url>
 <loc>https://devcloud.co.za/diagnosing-ec2-performance-issues/</loc>
@@ -87,6 +93,14 @@
 <lastmod>2020-10-08T18:21:29+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\14/df8a5c58-68a2-4f99-bc4d-3e080890d13a.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
+</url>
+<url>
+<loc>https://devcloud.co.za/how-to-use-arm-based-gpu-ec2-instances-as-ecs-container-instances/</loc>
+<lastmod>2022-06-01T20:07:23+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\17/AWS-Nvidia.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
