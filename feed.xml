@@ -3,7 +3,7 @@
     <title>DevCloud</title>
     <link href="https://devcloud.co.za/feed.xml" rel="self" />
     <link href="https://devcloud.co.za" />
-    <updated>2022-06-01T20:07:23+02:00</updated>
+    <updated>2022-06-01T20:17:11+02:00</updated>
     <author>
         <name>Jenade Moodley</name>
     </author>
@@ -21,8 +21,9 @@
             <category term="ECS"/>
             <category term="EC2"/>
             <category term="Docker"/>
+            <category term="ARM64"/>
 
-        <updated>2022-06-01T20:07:23+02:00</updated>
+        <updated>2022-06-01T20:17:11+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/17/AWS-Nvidia.jpg" alt="" />
