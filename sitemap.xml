@@ -24,6 +24,9 @@
 <loc>https://devcloud.co.za/blog/alb/</loc>
 </url>
 <url>
+<loc>https://devcloud.co.za/blog/amazon-linux/</loc>
+</url>
+<url>
 <loc>https://devcloud.co.za/blog/arm/</loc>
 </url>
 <url>
@@ -120,6 +123,17 @@
 <lastmod>2022-02-07T00:12:01+02:00</lastmod>
 <image:image>
 <image:loc>https://devcloud.co.za/media\posts\7/AWS_EFS-system_DIMq8h4.jpg</image:loc>
+<image:title><![CDATA[]]></image:title>
+</image:image>
+</url>
+<url>
+<loc>https://devcloud.co.za/page/2/</loc>
+</url>
+<url>
+<loc>https://devcloud.co.za/test/</loc>
+<lastmod>2023-12-11T18:42:08+02:00</lastmod>
+<image:image>
+<image:loc>https://devcloud.co.za/media\posts\22/98dd3b8b34ef4a7c9a8f29738e221408.png</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
