@@ -3,7 +3,7 @@
     <title>DevCloud</title>
     <link href="https://devcloud.co.za/feed.xml" rel="self" />
     <link href="https://devcloud.co.za" />
-    <updated>2023-12-11T18:42:08+02:00</updated>
+    <updated>2024-01-11T09:26:58+02:00</updated>
     <author>
         <name>Jenade Moodley</name>
     </author>
@@ -14,15 +14,15 @@
         <author>
             <name>Jenade Moodley</name>
         </author>
-        <link href="https://devcloud.co.za/test/"/>
-        <id>https://devcloud.co.za/test/</id>
+        <link href="https://devcloud.co.za/how-to-configure-cgroupv2-on-amazon-linux-2/"/>
+        <id>https://devcloud.co.za/how-to-configure-cgroupv2-on-amazon-linux-2/</id>
         <media:content url="https://devcloud.co.za/media/posts/22/98dd3b8b34ef4a7c9a8f29738e221408.png" medium="image" />
             <category term="Linux"/>
             <category term="EC2"/>
             <category term="Amazon Linux"/>
             <category term="AWS"/>
 
-        <updated>2023-12-11T18:42:08+02:00</updated>
+        <updated>2024-01-11T09:26:58+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://devcloud.co.za/media/posts/22/98dd3b8b34ef4a7c9a8f29738e221408.png" alt="" />
